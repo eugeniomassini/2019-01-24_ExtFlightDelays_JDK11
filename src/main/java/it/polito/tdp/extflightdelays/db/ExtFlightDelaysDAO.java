@@ -10,12 +10,13 @@ import java.util.List;
 
 import it.polito.tdp.extflightdelays.model.Airline;
 import it.polito.tdp.extflightdelays.model.Airport;
+import it.polito.tdp.extflightdelays.model.Arco;
 import it.polito.tdp.extflightdelays.model.Flight;
 
 public class ExtFlightDelaysDAO {
 
 	public List<String> loadAllStates(){
-		String sql = "SELECT distinct(STATE) from airports";
+		String sql = "SELECT distinct(STATE) from airports order by state asc";
 		List<String> result = new ArrayList<String>();
 
 		try {
@@ -114,5 +115,38 @@ public class ExtFlightDelaysDAO {
 			System.out.println("Errore connessione al database");
 			throw new RuntimeException("Error Connection Database");
 		}
+	}
+
+	
+	public List<Arco> getArchi() {
+		
+		String sql = "select a1.`STATE` as uno, a2.`STATE` as due, count(distinct f.`TAIL_NUMBER`) as peso " + 
+				"from airports as a1, airports as a2, flights as f " + 
+				"where a1.`ID`=f.`ORIGIN_AIRPORT_ID` " + 
+				"and a2.`ID`=f.`DESTINATION_AIRPORT_ID` " + 
+				"group by a1.`STATE`, a2.`STATE`";
+		
+		List<Arco> result = new ArrayList<Arco>();
+
+		try {
+			Connection conn = DBConnect.getConnection();
+			PreparedStatement st = conn.prepareStatement(sql);
+			ResultSet rs = st.executeQuery();
+
+			while (rs.next()) {
+				
+				result.add(new Arco(rs.getString("uno"), rs.getString("due"), rs.getDouble("peso")));
+			}
+
+			conn.close();
+			return result;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Errore connessione al database");
+			throw new RuntimeException("Error Connection Database");
+		}
+		
+		
 	}
 }

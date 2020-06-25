@@ -3,6 +3,7 @@ package it.polito.tdp.extflightdelays;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import it.polito.tdp.extflightdelays.model.InfoArco;
 import it.polito.tdp.extflightdelays.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -28,7 +29,7 @@ public class FXMLController {
     private Button btnCreaGrafo;
 
     @FXML
-    private ComboBox<?> cmbBoxStati;
+    private ComboBox<String> cmbBoxStati;
 
     @FXML
     private Button btnVisualizzaVelivoli;
@@ -44,6 +45,12 @@ public class FXMLController {
 
     @FXML
     void doCreaGrafo(ActionEvent event) {
+    	
+    	txtResult.clear();
+    	
+    	model.creaGrafo();
+    	
+    	cmbBoxStati.getItems().addAll(model.getStati());
 
     }
 
@@ -55,6 +62,20 @@ public class FXMLController {
     @FXML
     void doVisualizzaVelivoli(ActionEvent event) {
 
+    	txtResult.clear();
+    	
+    	String stato = cmbBoxStati.getValue();
+    	
+    	if(stato==null) {
+    		txtResult.appendText("Selezionare uno stato");
+    		return;
+    	}
+    	
+    	for(InfoArco i: model.getInfoArco(stato)) {
+    		txtResult.appendText(i+"\n");
+    	}
+    	
+    	
     }
 
     @FXML
