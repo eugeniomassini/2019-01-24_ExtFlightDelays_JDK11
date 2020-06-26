@@ -18,6 +18,7 @@ public class Model {
 	private Graph <String, DefaultWeightedEdge> grafo;
 	private ExtFlightDelaysDAO dao;
 	private List<String> stati;
+	private Simulator sim;
 	
 	public Model() {
 		dao = new ExtFlightDelaysDAO();
@@ -70,7 +71,15 @@ public class Model {
 		return output;
 		
 	}
+
+	public Graph<String, DefaultWeightedEdge> getGrafo() {
+		return grafo;
+	}
 	
-	
+	public List<InfoStato> calcolaPersone(int numeroPersone, int numeroGiorni, String partenza){
+		sim = new Simulator();
+		return sim.calcolaPersone(numeroPersone, numeroGiorni, partenza, this.grafo);
+		
+	}
 
 }

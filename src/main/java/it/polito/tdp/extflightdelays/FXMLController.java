@@ -56,6 +56,13 @@ public class FXMLController {
 
     @FXML
     void doSimula(ActionEvent event) {
+    	
+    	int numeroPersone = Integer.parseInt(txtT.getText());
+    	int numeroGiorni = Integer.parseInt(txtG.getText());
+    	String partenza = cmbBoxStati.getValue();
+    	
+    	
+    	System.out.println(model.calcolaPersone(numeroPersone, numeroGiorni, partenza));
 
     }
 
